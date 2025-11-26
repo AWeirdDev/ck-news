@@ -1,3 +1,10 @@
+At the time of writing (2025-11-26), this does not work anymore, but I'll put it here for future reference.
+This proves that scraping prevention is pretty bad on this site.
+
+Anyhow, if you'd like, you can [contact me](https://github.com/AWeirdDev) if you want to talk about this.
+
+***
+
 # ck-api
 
 堅果中學公告擷取 API。
