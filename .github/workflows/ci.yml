@@ -1,4 +1,4 @@
-name: Build and Deploy Jekyll Site
+name: Generate Site
 
 on:
   schedule:
@@ -6,59 +6,42 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: true
+  contents: write
 
 jobs:
-  build:
+  generate:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v6
+
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
-      - name: Set up uv
-        uses: astral-sh/setup-uv@v6
 
       - name: Install dependencies
         run: uv pip install --system -r dev-requirements.txt
 
-      - name: Generate Jekyll source
+      - name: Generate Markdown site
         run: python gen.py
 
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
+      - name: Configure Jekyll
+        run: |
+          cat > site/_config.yml <<EOF
+          title: My Site
+          remote_theme: pages-themes/cayman@v0.2.0
 
-      - name: Build with Jekyll
-        uses: actions/jekyll-build-pages@v1
+          plugins:
+            - jekyll-remote-theme
+          EOF
+
+      - name: Disable GitHub Actions cleanup
+        run: touch site/.nojekyll.disabled
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          source: site
-          destination: _site
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: _site
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site
