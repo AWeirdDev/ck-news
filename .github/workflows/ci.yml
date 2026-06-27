@@ -41,7 +41,7 @@ jobs:
 
       - name: Adds some shit
         run: |
-          echo "title: 你大建中" >> site/_config.yml
+          echo "title: 你大建中\ntheme: minima" >> site/_config.yml
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1

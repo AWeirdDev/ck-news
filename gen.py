@@ -23,7 +23,10 @@ res = client.get(IMPORTANT_NOTICE_URL)
 feed = feedparser.parse(res.text)
 
 
-texts = ["---\ntitle: 你大建中\n---\n\n# 你大建中有公告\n我不敢說"]
+texts = [
+    "---\ntitle: 你大建中\n---\n\n# 你大建中有公告\n我不敢說\n\n"
+    + '<base href="https://www.ck.tp.edu.tw/" />'
+]
 
 for item in feed.entries:
     print("Added:", item.get("title"))
