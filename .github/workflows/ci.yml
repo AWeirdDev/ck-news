@@ -37,9 +37,6 @@ jobs:
             - jekyll-remote-theme
           EOF
 
-      - name: Disable GitHub Actions cleanup
-        run: touch site/.nojekyll.disabled
-
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
