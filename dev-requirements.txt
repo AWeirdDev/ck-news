@@ -1,5 +1,3 @@
-fastapi
-uvicorn
 selectolax
 primp
-rjsonc
+feedparser
