@@ -39,13 +39,29 @@ jobs:
       - name: Run gen.py
         run: python gen.py
 
+      - name: Adds some shit
+        run: |
+          echo "title: 你大建中" >> site/_config.yml
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+
+      - name: Install Jekyll
+        run: gem install jekyll bundler
+
+      - name: Build with Jekyll
+        run: jekyll build --source site/ --destination site/_site/
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: site/
+          path: site/_site/
 
       - name: Deploy to GitHub Pages
         id: deployment
