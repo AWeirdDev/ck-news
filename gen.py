@@ -23,10 +23,7 @@ res = client.get(IMPORTANT_NOTICE_URL)
 feed = feedparser.parse(res.text)
 
 
-texts = [
-    "---\ntitle: 你大建中\n---\n\n# 你大建中有公告\n我不敢說\n\n"
-    + '<base href="https://www.ck.tp.edu.tw/" />'
-]
+texts = []
 
 for item in feed.entries:
     print("Added:", item.get("title"))
@@ -43,7 +40,7 @@ for item in feed.entries:
 os.makedirs("dist", exist_ok=True)
 
 with open("dist/index.md", "w") as f:
-    f.write("\n\n***\n\n".join(texts))
+    f.write('<base href="https://www.ck.tp.edu.tw/" />\n\n' + "\n\n***\n\n".join(texts))
 
 print()
 print("=====> built.")
