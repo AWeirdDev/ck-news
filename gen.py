@@ -40,9 +40,9 @@ for item in feed.entries:
     text += transformer.text()
     texts.append(text)
 
-os.makedirs("site", exist_ok=True)
+os.makedirs("dist", exist_ok=True)
 
-with open("site/index.md", "w") as f:
+with open("dist/index.md", "w") as f:
     f.write("\n\n***\n\n".join(texts))
 
 print()
