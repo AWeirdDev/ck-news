@@ -2,7 +2,7 @@ name: Generate and Deploy Site
 
 on:
   schedule:
-    - cron: "0 * * * *" # Every hour
+    - cron: "0 */12 * * *" # Every 12 hours
   workflow_dispatch: # Allow manual runs
 
 permissions:
@@ -39,21 +39,16 @@ jobs:
       - name: Run gen.py
         run: python gen.py
 
-      - name: Adds some shit
-        run: |
-          printf "title: 你大建中\nremote_theme: jekyll/minima" >> site/_config.yml
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+      - uses: actions/setup-node@v6
         with:
-          ruby-version: "3.3"
-          bundler-cache: true
+          node-version: "lts/*"
 
-      - name: Install Jekyll
-        run: gem install jekyll bundler
+      - name: Install markdown-to-html
+        run: npm i -g markdown-to-html-cli
 
-      - name: Build with Jekyll
-        run: jekyll build --source site/ --destination site/_site/
+      - name: Transform markdown
+        run: |
+          markdown-to-html --source dist/index.md --output dist/index.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -61,7 +56,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: site/_site/
+          path: dist
 
       - name: Deploy to GitHub Pages
         id: deployment
